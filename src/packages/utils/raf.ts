@@ -12,13 +12,13 @@ function requestAniFrame() {
       }
     );
   } else {
-    return function (callback: Function) {
+    return function (callback: () => void) {
       setTimeout(callback, 1000 / 60);
     };
   }
 }
 
-export function cancelRaf(id: number) {
+export function cancelRaf(id: number): void {
   if (inBrowser) {
     cancelAnimationFrame(id);
   } else {

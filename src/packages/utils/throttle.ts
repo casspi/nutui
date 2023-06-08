@@ -3,13 +3,13 @@
  * @param fn
  * @param delay
  */
-export function debounce(fn: Function, delay: number) {
+export function debounce(fn: () => void, delay: number): () => void {
   let timer: null | number = null;
 
   return function () {
     if (timer) clearTimeout(timer);
 
-    timer = setTimeout(fn, delay);
+    timer = window.setTimeout(fn, delay);
   };
 }
 
@@ -18,19 +18,19 @@ export function debounce(fn: Function, delay: number) {
  * @param fn
  * @param delay
  */
-export function throttle(fn: Function, delay: number) {
+export function throttle(fn: () => void, delay: number): () => void {
   let timer: number | null = null;
   let startTime = Date.now();
 
-  return function () {
-    let now = Date.now();
-    let remaining = delay - (now - startTime);
+  return function (...args) {
+    const now = Date.now();
+    const remaining = delay - (now - startTime);
     if (timer) clearTimeout(timer);
     if (remaining <= 0) {
-      fn.apply(null, arguments);
+      fn.apply(null, ...args);
       startTime = Date.now();
     } else {
-      timer = setTimeout(fn, remaining);
+      timer = window.setTimeout(fn, remaining);
     }
   };
 }
